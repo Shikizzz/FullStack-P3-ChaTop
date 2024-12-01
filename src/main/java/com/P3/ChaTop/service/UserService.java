@@ -16,8 +16,11 @@ public class UserService {
     }
 
     public Boolean emailExistsInDB(String email){
-        List<User> users = repository.findByEmail(email);
+        List<User> users = repository.findByEmail(email); //emails are unique
         return users.size()>0;
+    }
+    public User findByEmail(String email){
+        return repository.findByEmail(email).get(0); //emails are unique
     }
 
     public void addUsertoDB(User user){

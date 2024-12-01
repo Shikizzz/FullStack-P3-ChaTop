@@ -23,8 +23,8 @@ public class User {
 
     public User(){};
     public User(String email, String name, String password, Timestamp created_at, Timestamp updated_at) {
-        this.email = email;
         this.name = name;
+        this.email = email;
         this.password = password;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -33,6 +33,7 @@ public class User {
     public Integer getId() {
         return id;
     }
+    public void setId(Integer id) {this.id = id;}
     public String getEmail() {
         return email;
     }
