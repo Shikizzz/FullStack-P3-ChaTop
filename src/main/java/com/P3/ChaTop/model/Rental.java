@@ -18,7 +18,11 @@ public class Rental {
     private String picture; //url of the picture
     @Column(name="description")
     private String description;
-    @Column(name="owner_id")
+    /*@ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name ="id")*/
+    @Column
     private Integer owner_id;
     @Column(name="created_at")
     private Timestamp created_at;

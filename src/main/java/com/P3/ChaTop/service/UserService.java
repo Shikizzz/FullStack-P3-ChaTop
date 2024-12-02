@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,5 +27,11 @@ public class UserService {
     public void addUsertoDB(User user){
         user.setUpdated_at(new Timestamp(System.currentTimeMillis()));
         repository.save(user);
+    }
+
+    public User findById(Integer id) {
+        Optional<User> optionalUser = repository.findById(id);
+        User user = optionalUser.orElseGet(User::new);
+        return user;
     }
 }

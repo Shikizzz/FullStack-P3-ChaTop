@@ -3,7 +3,7 @@ package com.P3.ChaTop.controller;
 import com.P3.ChaTop.model.DTO.auth.LoginRequest;
 import com.P3.ChaTop.model.DTO.auth.RegisterRequest;
 import com.P3.ChaTop.model.DTO.auth.Token;
-import com.P3.ChaTop.model.DTO.UserDto;
+import com.P3.ChaTop.model.DTO.auth.UserDto;
 import com.P3.ChaTop.model.User;
 import com.P3.ChaTop.service.JWTService;
 import com.P3.ChaTop.service.UserService;
@@ -62,6 +62,13 @@ public class LoginController {
     @GetMapping("/auth/me")
     public ResponseEntity<UserDto> getMyUser(Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Integer id){
+        User user = userService.findById(id);
         UserDto userDto = modelMapper.map(user, UserDto.class);
         return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
     }

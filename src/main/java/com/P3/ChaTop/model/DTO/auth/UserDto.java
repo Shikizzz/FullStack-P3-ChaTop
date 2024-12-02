@@ -1,11 +1,11 @@
-package com.P3.ChaTop.model.DTO;
+package com.P3.ChaTop.model.DTO.auth;
 
 import java.sql.Timestamp;
 
 public class UserDto {
     private Integer id;
-    private String email;
     private String name;
+    private String email;
     private Timestamp created_at;
     private Timestamp updated_at;
 

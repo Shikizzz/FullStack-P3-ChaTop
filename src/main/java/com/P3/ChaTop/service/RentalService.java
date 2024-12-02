@@ -3,6 +3,7 @@ package com.P3.ChaTop.service;
 import com.P3.ChaTop.model.DTO.rental.GetAllRentalsResponse;
 import com.P3.ChaTop.model.DTO.rental.RentalDTO;
 import com.P3.ChaTop.model.DTO.rental.RentalPost;
+import com.P3.ChaTop.model.DTO.rental.RentalPut;
 import com.P3.ChaTop.model.Rental;
 import com.P3.ChaTop.repository.RentalRepository;
 import com.P3.ChaTop.repository.UserRepository;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class RentalService {
@@ -54,6 +56,29 @@ public class RentalService {
             return false;
         }
     }
+    public boolean putRental(RentalPut rentalPut, Integer id) {
+        Optional<Rental> rental = rentalRepository.findById(id);
+        if (rental.isEmpty() || rental.get().getOwner_id()!=id){
+            return false;
+        }
+        Rental updatedRental = rental.get();
+        updatedRental.setName(rentalPut.getName());
+        updatedRental.setSurface(rentalPut.getSurface());
+        updatedRental.setPrice(rentalPut.getPrice());
+        updatedRental.setDescription(rentalPut.getDescription());
+        updatedRental.setUpdated_at(new Timestamp(new Date().getTime()));
+        rentalRepository.save(updatedRental);
+        return true;
+    }
+    public GetAllRentalsResponse getAllRentals() {
+        Rental[] rentals = rentalRepository.findAll().toArray(new Rental[0]);
+        return new GetAllRentalsResponse(rentals);
+    }
+    public RentalDTO getRentalById(Integer id) {
+        Optional<Rental> rental = rentalRepository.findById(id);
+        RentalDTO rentalDTO = rental.isPresent() ? modelMapper.map(rental, RentalDTO.class) : new RentalDTO();
+        return rentalDTO;
+    }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
@@ -61,16 +86,5 @@ public class RentalService {
         fos.write(file.getBytes());
         fos.close();
         return convFile;
-    }
-
-    public GetAllRentalsResponse getAllRentals() {
-        Rental[] rentals = rentalRepository.findAll().toArray(new Rental[0]);
-        return new GetAllRentalsResponse(rentals);
-    }
-
-    public RentalDTO getRentalById(int id) {
-        Rental rental = rentalRepository.getReferenceById(id);
-        RentalDTO rentalDTO = modelMapper.map(rental, RentalDTO.class);
-        return rentalDTO;
     }
 }
