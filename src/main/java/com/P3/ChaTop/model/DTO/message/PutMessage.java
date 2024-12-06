@@ -1,8 +1,14 @@
 package com.P3.ChaTop.model.DTO.message;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class PutMessage {
+    @NotEmpty (message = "Message may not be empty")
     private String message;
+    @NotNull
     private Integer user_id;
+    @NotNull
     private Integer rental_id;
 
     public String getMessage() {

@@ -18,12 +18,11 @@ public class Rental {
     private String picture; //url of the picture
     @Column(name="description")
     private String description;
-    /*@ManyToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
-    @JoinColumn(name ="id")*/
-    @Column
-    private Integer owner_id;
+    @JoinColumn(name ="owner_id")
+    private User user;
     @Column(name="created_at")
     private Timestamp created_at;
     @Column(name="updated_at")
@@ -77,12 +76,12 @@ public class Rental {
         this.description = description;
     }
 
-    public int getOwner_id() {
-        return owner_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner_id(int owner_id) {
-        this.owner_id = owner_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Timestamp getCreated_at() {

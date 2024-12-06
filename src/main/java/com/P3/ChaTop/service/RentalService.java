@@ -17,9 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RentalService {
@@ -46,7 +44,7 @@ public class RentalService {
             rental.setPrice(rentalPost.price());
             rental.setPicture(uploadResult.get("url").toString());
             rental.setDescription(rentalPost.description());
-            rental.setOwner_id(id);
+            rental.setUser(userRepository.findById(id).get()); //is present because get from DB is controller
             Timestamp now = new Timestamp(new Date().getTime());
             rental.setCreated_at(now);
             rental.setUpdated_at(now);
@@ -56,9 +54,9 @@ public class RentalService {
             return false;
         }
     }
-    public boolean putRental(RentalPut rentalPut, Integer id) {
-        Optional<Rental> rental = rentalRepository.findById(id);
-        if (rental.isEmpty() || rental.get().getOwner_id()!=id){
+    public boolean putRental(RentalPut rentalPut,Integer rentalId,  Integer userId) {
+        Optional<Rental> rental = rentalRepository.findById(rentalId);
+        if (rental.isEmpty() || rental.get().getUser().getId().equals(userId)){ //Verify if user is the Rental's poster
             return false;
         }
         Rental updatedRental = rental.get();
@@ -71,13 +69,23 @@ public class RentalService {
         return true;
     }
     public GetAllRentalsResponse getAllRentals() {
-        Rental[] rentals = rentalRepository.findAll().toArray(new Rental[0]);
-        return new GetAllRentalsResponse(rentals);
+        List<Rental> rentals = rentalRepository.findAll();//toArray(new Rental[0]);
+        List<RentalDTO> rentalsDTO = new ArrayList<>();
+        rentals.forEach(rental -> {
+                RentalDTO rentalDto = modelMapper.map(rental, RentalDTO.class);
+                rentalDto.setOwner_id(rental.getUser().getId());
+                rentalsDTO.add(rentalDto);
+               });
+        return new GetAllRentalsResponse(rentalsDTO.toArray(new RentalDTO[0]));
     }
     public RentalDTO getRentalById(Integer id) {
         Optional<Rental> rental = rentalRepository.findById(id);
-        RentalDTO rentalDTO = rental.isPresent() ? modelMapper.map(rental, RentalDTO.class) : new RentalDTO();
-        return rentalDTO;
+        if(rental.isPresent()){
+            RentalDTO rentalDTO = modelMapper.map(rental, RentalDTO.class);
+            rentalDTO.setOwner_id(rental.get().getUser().getId());
+            return rentalDTO;
+        }
+        return new RentalDTO(); //else
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

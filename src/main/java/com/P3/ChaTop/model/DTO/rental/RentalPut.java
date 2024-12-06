@@ -1,11 +1,19 @@
 package com.P3.ChaTop.model.DTO.rental;
 
-import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class RentalPut {
+    @NotBlank(message = "Name cannot be empty")
     private String name;
+    @NotNull(message = "Surface cannot be empty")
+    @Min(value = 0, message = "Surface should be positive")
     private float surface;
+    @NotNull(message = "Price cannot be empty")
+    @Min(value = 0, message = "Price should be positive")
     private float price;
+    @NotBlank(message = "Description cannot be empty")
     private String description;
 
     public String getName() {

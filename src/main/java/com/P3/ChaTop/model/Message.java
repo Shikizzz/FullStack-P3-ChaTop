@@ -9,10 +9,17 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="rental_id")
-    private Integer rental_id;
-    @Column(name="user_id")
-    private Integer user_id;
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name ="rental_id")
+    private Rental rental;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name ="user_id")
+    private User user;
     @Column(name="message")
     private String message;
     @Column(name="created_at")
@@ -26,22 +33,6 @@ public class Message {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getRental_id() {
-        return rental_id;
-    }
-
-    public void setRental_id(Integer rental_id) {
-        this.rental_id = rental_id;
-    }
-
-    public Integer getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
     }
 
     public String getMessage() {
@@ -66,5 +57,21 @@ public class Message {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Rental getRental() {
+        return rental;
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
