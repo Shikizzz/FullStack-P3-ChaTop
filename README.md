@@ -26,5 +26,8 @@ In your terminal, type these commands :
 
 ## Run project :
 
-In your terminal, go to the preject root and use this command:
-mvn spring-boot:run
+In your terminal, go to the preject root and use these commands:
+
+> mvn clean install.
+
+> mvn spring-boot:run
