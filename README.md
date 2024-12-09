@@ -31,3 +31,8 @@ In your terminal, go to the preject root and use these commands:
 > mvn clean install.
 
 > mvn spring-boot:run
+
+## Swagger URL :
+
+http://localhost:3001/swagger-ui/index.html
+
